@@ -1,34 +1,44 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext.jsx'
 
 function MyThesisProjects() {
-  // 模拟论文项目数据
-  const [projects, setProjects] = useState([
-    {
-      id: 1,
-      title: '人工智能在教育领域的应用研究',
-      targetWords: 15000,
-      completedWords: 5200,
-      deadline: '2024-06-15',
-      progress: 35
-    },
-    {
-      id: 2,
-      title: '大数据分析技术综述',
-      targetWords: 12000,
-      completedWords: 8700,
-      deadline: '2024-05-30',
-      progress: 72
-    },
-    {
-      id: 3,
-      title: '现代前端框架性能比较研究',
-      targetWords: 10000,
-      completedWords: 2300,
-      deadline: '2024-07-20',
-      progress: 23
+  const navigate = useNavigate()
+  const { currentUser } = useAuth()
+  const [projects, setProjects] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  // 从API获取论文项目列表
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        setIsLoading(true)
+        setError('')
+        
+        const response = await fetch('http://localhost:3001/api/papers', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        })
+        
+        if (!response.ok) {
+          const errorData = await response.json()
+          throw new Error(errorData.message || '获取项目列表失败')
+        }
+        
+        const data = await response.json()
+        setProjects(data.data || [])
+      } catch (err) {
+        setError(err.message || '获取项目列表时出现错误')
+        console.error('获取项目列表失败:', err)
+      } finally {
+        setIsLoading(false)
+      }
     }
-  ])
+    
+    fetchProjects()
+  }, [currentUser])
 
   // 计算剩余天数
   const calculateDaysLeft = (deadline) => {
@@ -53,21 +63,51 @@ function MyThesisProjects() {
     return 'text-green-600'
   }
 
+  if (isLoading) {
+    return (
+      <div className="container mx-auto px-4 py-8 flex justify-center items-center">
+        <div className="text-lg text-gray-600">加载中...</div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="bg-red-50 text-red-600 p-4 rounded-lg mb-4">
+          {error}
+        </div>
+        <button 
+          onClick={() => window.location.reload()}
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          重试
+        </button>
+      </div>
+    )
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
       <header className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold text-gray-800">我的论文项目</h1>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200">
+        <button 
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200"
+          onClick={() => navigate('/create-thesis')}
+        >
           添加新项目
         </button>
       </header>
 
       <div className="grid gap-6">
         {projects.map(project => {
+          // 格式化日期显示
+          const formattedDeadline = new Date(project.deadline).toLocaleDateString('zh-CN')
           const daysLeft = calculateDaysLeft(project.deadline)
           const dailyTarget = Math.ceil(
-            (project.targetWords - project.completedWords) / (daysLeft || 1)
+            ((project.targetWords || 0) - (project.completedWords || 0)) / (daysLeft || 1)
           )
+          const progress = project.progress || 0
           
           return (
             <Link to={`/thesis/${project.id}`} key={project.id}>
@@ -82,20 +122,20 @@ function MyThesisProjects() {
                   
                   <div className="mb-4">
                     <div className="flex justify-between text-sm text-gray-600 mb-1">
-                      <span>进度：{project.progress}%</span>
-                      <span>{project.completedWords}/{project.targetWords} 字</span>
+                      <span>进度：{progress}%</span>
+                      <span>{project.completedWords || 0}/{project.targetWords || 0} 字</span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">
                       <div 
-                        className={`h-2 rounded-full ${getProgressColor(project.progress)}`} 
-                        style={{ width: `${project.progress}%` }}
+                        className={`h-2 rounded-full ${getProgressColor(progress)}`} 
+                        style={{ width: `${progress}%` }}
                       ></div>
                     </div>
                   </div>
                   
                   <div className="text-sm text-gray-500">
                     <div className="flex justify-between">
-                      <span>截止日期：{project.deadline}</span>
+                      <span>截止日期：{formattedDeadline}</span>
                       <span>每日目标：{dailyTarget} 字</span>
                     </div>
                   </div>
@@ -109,7 +149,10 @@ function MyThesisProjects() {
       {projects.length === 0 && (
         <div className="bg-white rounded-xl shadow-md p-8 text-center">
           <p className="text-gray-600 mb-4">您还没有创建任何论文项目</p>
-          <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200">
+          <button 
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200"
+            onClick={() => navigate('/create-thesis')}
+          >
             创建第一个项目
           </button>
         </div>

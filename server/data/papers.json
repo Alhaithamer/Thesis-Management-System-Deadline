@@ -1,0 +1,157 @@
+[
+  {
+    "id": 1762691600249,
+    "title": "持久化测试论文",
+    "description": "这是一篇用于测试数据持久化的论文",
+    "deadline": "2026-11-09T12:33:20.219Z",
+    "userId": 3,
+    "createdAt": "2025-11-09T12:33:20.249Z",
+    "updatedAt": "2025-11-09T12:33:20.249Z",
+    "progresses": [
+      {
+        "id": 1762691600250,
+        "paperId": 1762691600249,
+        "progressPercentage": 0,
+        "dailyTarget": 1000,
+        "createdAt": "2025-11-09T12:33:20.250Z",
+        "updatedAt": "2025-11-09T12:33:20.250Z"
+      }
+    ]
+  },
+  {
+    "id": 1762691704704,
+    "title": "持久化测试论文_1762691704685",
+    "description": "这是一篇用于测试数据持久化的论文",
+    "deadline": "2026-11-09T12:35:04.685Z",
+    "userId": 3,
+    "createdAt": "2025-11-09T12:35:04.704Z",
+    "updatedAt": "2025-11-09T12:35:04.711Z",
+    "progresses": [
+      {
+        "id": 1762691704705,
+        "paperId": 1762691704704,
+        "progressPercentage": 0,
+        "dailyTarget": 1000,
+        "createdAt": "2025-11-09T12:35:04.705Z",
+        "updatedAt": "2025-11-09T12:35:04.705Z"
+      },
+      {
+        "id": 1762691704711,
+        "paperId": 1762691704704,
+        "progressPercentage": 25,
+        "dailyTarget": 1500,
+        "completedWords": 2000,
+        "note": "持久化测试更新",
+        "createdAt": "2025-11-09T12:35:04.711Z",
+        "updatedAt": "2025-11-09T12:35:04.711Z"
+      }
+    ],
+    "progress": 25,
+    "dailyTarget": 1500,
+    "completedWords": 2000
+  },
+  {
+    "id": 1762692179912,
+    "title": "持久化测试论文_1762692179888",
+    "description": "这是一篇用于测试数据持久化的论文",
+    "deadline": "2026-11-09T12:42:59.888Z",
+    "userId": 3,
+    "createdAt": "2025-11-09T12:42:59.912Z",
+    "updatedAt": "2025-11-09T12:45:28.822Z",
+    "progresses": [
+      {
+        "id": 1762692179913,
+        "paperId": 1762692179912,
+        "progressPercentage": 0,
+        "dailyTarget": 1000,
+        "createdAt": "2025-11-09T12:42:59.913Z",
+        "updatedAt": "2025-11-09T12:42:59.913Z"
+      },
+      {
+        "id": 1762692179918,
+        "paperId": 1762692179912,
+        "progressPercentage": 25,
+        "dailyTarget": 1500,
+        "completedWords": 2000,
+        "note": "持久化测试更新",
+        "createdAt": "2025-11-09T12:42:59.918Z",
+        "updatedAt": "2025-11-09T12:42:59.918Z"
+      },
+      {
+        "id": 1762692307828,
+        "paperId": 1762692179912,
+        "progressPercentage": 0,
+        "dailyTarget": 83,
+        "completedWords": 100,
+        "note": "日常进度更新",
+        "createdAt": "2025-11-09T12:45:07.828Z",
+        "updatedAt": "2025-11-09T12:45:07.828Z"
+      },
+      {
+        "id": 1762692313120,
+        "paperId": 1762692179912,
+        "progressPercentage": 4,
+        "dailyTarget": 83,
+        "completedWords": 1100,
+        "note": "日常进度更新",
+        "createdAt": "2025-11-09T12:45:13.120Z",
+        "updatedAt": "2025-11-09T12:45:13.120Z"
+      },
+      {
+        "id": 1762692328822,
+        "paperId": 1762692179912,
+        "progressPercentage": 100,
+        "dailyTarget": 83,
+        "completedWords": 100000,
+        "note": "日常进度更新",
+        "createdAt": "2025-11-09T12:45:28.822Z",
+        "updatedAt": "2025-11-09T12:45:28.822Z"
+      }
+    ],
+    "progress": 100,
+    "dailyTarget": 83,
+    "completedWords": 100000
+  },
+  {
+    "id": 1762692354703,
+    "title": "11111",
+    "description": "",
+    "deadline": "2026-11-11T03:11:00.000Z",
+    "userId": 3,
+    "createdAt": "2025-11-09T12:45:54.703Z",
+    "updatedAt": "2025-11-09T13:03:50.364Z",
+    "progresses": [
+      {
+        "id": 1762692354704,
+        "paperId": 1762692354703,
+        "progressPercentage": 0,
+        "dailyTarget": 371,
+        "createdAt": "2025-11-09T12:45:54.704Z",
+        "updatedAt": "2025-11-09T12:45:54.704Z"
+      },
+      {
+        "id": 1762692362229,
+        "paperId": 1762692354703,
+        "progressPercentage": 0,
+        "dailyTarget": 31,
+        "completedWords": 10,
+        "note": "日常进度更新",
+        "createdAt": "2025-11-09T12:46:02.229Z",
+        "updatedAt": "2025-11-09T12:46:02.229Z"
+      },
+      {
+        "id": 1762693430364,
+        "paperId": 1762692354703,
+        "progressPercentage": 9,
+        "dailyTarget": 31,
+        "completedWords": 1000,
+        "note": "日常进度更新",
+        "createdAt": "2025-11-09T13:03:50.364Z",
+        "updatedAt": "2025-11-09T13:03:50.364Z"
+      }
+    ],
+    "progress": 9,
+    "dailyTarget": 31,
+    "completedWords": 1000
+  }
+]

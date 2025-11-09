@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext.jsx'
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -9,7 +10,9 @@ function Register() {
     confirmPassword: ''
   })
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
   const navigate = useNavigate()
+  const { login } = useAuth()
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -19,23 +22,55 @@ function Register() {
     }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+    setError('')
     
     // 表单验证
     if (formData.password !== formData.confirmPassword) {
-      alert('两次输入的密码不一致')
+      setError('两次输入的密码不一致')
+      return
+    }
+    
+    // 密码强度验证
+    if (formData.password.length < 6) {
+      setError('密码长度至少需要6个字符')
       return
     }
     
     setIsLoading(true)
     
-    // 模拟注册请求
-    setTimeout(() => {
-      console.log('注册信息:', formData)
+    try {
+      // 调用后端注册API
+      const response = await fetch('http://localhost:3001/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: formData.name,
+          email: formData.email,
+          password: formData.password
+        })
+      })
+      
+      const data = await response.json()
+      
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || '注册失败')
+      }
+      
+      // 注册成功后自动登录
+      await login(data.data, data.data.token)
+      
+      // 登录成功后跳转到论文项目页面
+      navigate('/my-thesis')
+    } catch (err) {
+      setError(err.message || '注册失败，请稍后重试')
+      console.error('注册错误:', err)
+    } finally {
       setIsLoading(false)
-      navigate('/login')
-    }, 1500)
+    }
   }
 
   return (
@@ -109,12 +144,16 @@ function Register() {
               />
             </div>
             
+            {error && (
+              <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-lg text-sm">
+                {error}
+              </div>
+            )}
+            
             <button
               type="submit"
               disabled={isLoading}
-              className={`w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 ${
-                isLoading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-blue-700'
-              }`}
+              className={`w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 ${isLoading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-blue-700'}`}
             >
               {isLoading ? '注册中...' : '注册'}
             </button>

@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext.jsx'
 
 function Home() {
+  const { currentUser } = useAuth();
   return (
     <div className="container mx-auto px-4 py-12">
       <header className="text-center mb-16">
@@ -46,18 +48,37 @@ function Home() {
         </section>
 
         <section className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-12 text-white text-center mb-16">
-          <h2 className="text-3xl font-bold mb-6">开始管理您的论文项目</h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto">
-            立即注册，享受智能论文管理功能，轻松应对学术挑战
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/register" className="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold hover:bg-blue-50 transition-colors duration-300">
-              免费注册
-            </Link>
-            <Link to="/login" className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white/10 transition-colors duration-300">
-              登录
-            </Link>
-          </div>
+          {currentUser ? (
+            <>
+              <h2 className="text-3xl font-bold mb-6">欢迎回来，{currentUser.username}</h2>
+              <p className="text-xl mb-8 max-w-2xl mx-auto">
+                继续管理您的论文项目，保持良好的写作进度
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link to="/my-thesis" className="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold hover:bg-blue-50 transition-colors duration-300">
+                  我的论文
+                </Link>
+                <Link to="/create-thesis" className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white/10 transition-colors duration-300">
+                  创建新项目
+                </Link>
+              </div>
+            </>
+          ) : (
+            <>
+              <h2 className="text-3xl font-bold mb-6">开始管理您的论文项目</h2>
+              <p className="text-xl mb-8 max-w-2xl mx-auto">
+                立即注册，享受智能论文管理功能，轻松应对学术挑战
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link to="/register" className="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold hover:bg-blue-50 transition-colors duration-300">
+                  免费注册
+                </Link>
+                <Link to="/login" className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white/10 transition-colors duration-300">
+                  登录
+                </Link>
+              </div>
+            </>
+          )}
         </section>
       </main>
 

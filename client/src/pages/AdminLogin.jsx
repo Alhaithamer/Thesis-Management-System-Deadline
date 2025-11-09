@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext.jsx'
 
-function Login() {
+function AdminLogin() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -31,14 +31,19 @@ function Login() {
         throw new Error(data.message || '登录失败，请检查邮箱和密码')
       }
       
+      // 验证是否为管理员
+      if (data.data.role !== 'ADMIN') {
+        throw new Error('请使用管理员账号登录')
+      }
+      
       // 使用AuthContext更新登录状态
       await login(data.data, data.data.token)
       
-      // 登录成功后跳转到论文项目页面
-      navigate('/my-thesis')
+      // 登录成功后跳转到管理员面板
+      navigate('/admin/dashboard')
     } catch (err) {
       setError(err.message || '登录失败，请稍后重试')
-      console.error('登录错误:', err)
+      console.error('管理员登录错误:', err)
     } finally {
       setIsLoading(false)
     }
@@ -46,13 +51,19 @@ function Login() {
 
   return (
     <div className="container mx-auto px-4 py-12">
-      <div className="max-w-md mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+      <div className="max-w-md mx-auto bg-gradient-to-br from-indigo-800 to-purple-900 rounded-xl shadow-xl overflow-hidden">
         <div className="p-8">
-          <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">登录</h2>
+          <div className="text-center mb-8">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-white mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            <h2 className="text-2xl font-bold text-white">管理员登录</h2>
+            <p className="text-indigo-200 mt-2">仅限管理员访问的安全区域</p>
+          </div>
           
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="email" className="block text-sm font-medium text-indigo-100 mb-1">
                 邮箱
               </label>
               <input
@@ -61,13 +72,13 @@ function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
-                placeholder="请输入邮箱"
+                className="w-full px-4 py-3 bg-indigo-950/50 border border-indigo-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors duration-200 text-white placeholder-indigo-400"
+                placeholder="请输入管理员邮箱"
               />
             </div>
             
             <div className="mb-6">
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="password" className="block text-sm font-medium text-indigo-100 mb-1">
                 密码
               </label>
               <input
@@ -76,13 +87,13 @@ function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
-                placeholder="请输入密码"
+                className="w-full px-4 py-3 bg-indigo-950/50 border border-indigo-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors duration-200 text-white placeholder-indigo-400"
+                placeholder="请输入管理员密码"
               />
             </div>
             
             {error && (
-              <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-lg text-sm">
+              <div className="mb-4 p-3 bg-red-900/30 text-red-300 rounded-lg text-sm">
                 {error}
               </div>
             )}
@@ -90,22 +101,22 @@ function Login() {
             <button
               type="submit"
               disabled={isLoading}
-              className={`w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 ${isLoading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-blue-700'}`}
+              className={`w-full bg-purple-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 ${isLoading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-purple-700'}`}
             >
-              {isLoading ? '登录中...' : '登录'}
+              {isLoading ? '登录中...' : '管理员登录'}
             </button>
           </form>
           
           <div className="mt-6 text-center">
-            <p className="text-gray-600">
-              还没有账号？ <Link to="/register" className="text-blue-600 hover:text-blue-800 font-medium">立即注册</Link>
-            </p>
+            <Link to="/login" className="text-indigo-300 hover:text-white font-medium transition-colors">
+              返回普通用户登录
+            </Link>
           </div>
         </div>
         
-        <div className="bg-gray-50 px-8 py-4">
+        <div className="bg-indigo-900/50 px-8 py-4">
           <div className="text-center">
-            <Link to="/" className="text-sm text-gray-600 hover:text-blue-600">
+            <Link to="/" className="text-sm text-indigo-300 hover:text-white transition-colors">
               返回首页
             </Link>
           </div>
@@ -115,4 +126,4 @@ function Login() {
   )
 }
 
-export default Login
+export default AdminLogin
