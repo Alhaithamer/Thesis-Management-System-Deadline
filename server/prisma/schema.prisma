@@ -1,0 +1,53 @@
+// Prisma Schema 定义
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" // 也可以替换为 mysql, sqlite 等
+  url      = env("DATABASE_URL")
+}
+
+// 用户表
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique @db.VarChar(50)
+  email     String   @unique @db.VarChar(255)
+  passwordHash String @db.VarChar(255)
+  role      String   @default("USER") @db.VarChar(20)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // 关系定义
+  papers    Paper[]
+}
+
+// 论文表
+model Paper {
+  id          Int      @id @default(autoincrement())
+  title       String   @db.VarChar(200)
+  description String?  @db.Text
+  deadline    DateTime
+  userId      Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // 关系定义
+  user        User      @relation(fields: [userId], references: [id])
+  progresses  Progress[]
+}
+
+// 进度表
+model Progress {
+  id                 Int      @id @default(autoincrement())
+  paperId            Int
+  progressPercentage Int
+  dailyTarget        Int?
+  note               String?  @db.Text
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  
+  // 关系定义
+  paper              Paper    @relation(fields: [paperId], references: [id])
+}
