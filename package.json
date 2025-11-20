@@ -1,13 +1,1 @@
-{
-  "name": "thesis-tracker",
-  "private": true,
-  "version": "1.0.0",
-  "scripts": {
-    "install:all": "npm install && cd server && npm install && cd ../client && npm install",
-    "start:server": "cd server && npm start",
-    "start:client": "cd client && npm run dev",
-    "build:client": "cd client && npm run build",
-    "build": "npm run build:client",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  }
-}
+{"name": "thesis-tracker", "private": true, "version": "1.0.0", "scripts": {"install:all": "npm install && cd server && npm install && cd ../client && npm install", "install:client": "cd client && npm install", "start:server": "cd server && npm start", "start:client": "cd client && npm run dev", "build:client": "cd client && npm run build", "build": "npm run build:client", "test": "echo \"Error: no test specified\" && exit 1"}}
